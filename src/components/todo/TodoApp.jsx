@@ -40,10 +40,10 @@ function LoginComponent(){
   }
 
   function handelSumit(){
-    if(username==='in28minutes' && password==='dummy'){
+    if(username==='in28minutes2' && password==='dummy'){
       setShowSuccessMessage(true)
       setShowErrorMessage(false)
-      navigate('/welcome/in28minutes')
+      navigate(`/welcome/${username}`)
     }else{
       setShowSuccessMessage(false)
       setShowErrorMessage(true)
@@ -76,12 +76,12 @@ function LoginComponent(){
 
 function WelcomeComponent(){
 
-  const params = useParams()
+  const {username} = useParams()
 
   
   return(
     <div className="Welcome">
-      <h1> 환영합니다</h1>
+      <h1> {username}님 환영합니다 </h1>
       <div >
         Welcome Component
       </div>
@@ -96,6 +96,17 @@ function ErrorComponent(){
      <h1>We Are working really hard!</h1>
      <div>
         404오류
+     </div>
+    </div>
+  )
+}
+
+function ListTodosComponent(){
+  return(
+    <div className="ListTodosComponent">
+     <h1>해야 할 일을 생각하세요</h1>
+     <div>
+        Todo details
      </div>
     </div>
   )
