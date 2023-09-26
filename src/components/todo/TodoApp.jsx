@@ -1,113 +1,58 @@
-import { useState } from 'react'
-import'./TodoApp.css'
-import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom'
 
-export default function TodoApp(){
-  return(
-    <div className="TodoApp">
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<LoginComponent />}></Route>
-          <Route path='login' element={<LoginComponent />}></Route>
-          <Route path='welcome/:username' element={<WelcomeComponent />}></Route>
-          <Route path='*' element={<ErrorComponent />}></Route>
-        </Routes>
-      </BrowserRouter>
-      
-      
-    </div>
-  )
-}
+import './TodoApp.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import LogoutComponent from './LogoutComponent'
+import ErrorComponent from './ErrorComponent'
+import HeaderComponent from './HeaderComponent'
+import ListTodosComponent from './ListTodosComponent'
+import WelcomeComponent from './WelcomeComponent'
+import LoginComponent from './LoginComponent'
+import AuthProvider, { useAuth } from './security/AuthContext'
 
-function LoginComponent(){
+export default function TodoApp() {
 
-  const[username, setUsername] = useState("in28minutes")
-
-  const[password, setPassword] = useState()
-
-  const[showSuccessMessage, setShowSuccessMessage] = useState(false)
-
-  const[showErrorMessage, setShowErrorMessage] = useState(false)
-
-  const navigate = useNavigate();
-
-  function handleUsernameChange(event){
-    setUsername(event.target.value)
-  }
-
-  function handlePasswordChange(event){
-    setPassword(event.target.value)
-  }
-
-  function handelSumit(){
-    if(username==='in28minutes2' && password==='dummy'){
-      setShowSuccessMessage(true)
-      setShowErrorMessage(false)
-      navigate(`/welcome/${username}`)
+  function AuthenticatedRoute({children}){
+    const authContext = useAuth()
+    if(authContext.isAuthenticated){
+      return children
     }else{
-      setShowSuccessMessage(false)
-      setShowErrorMessage(true)
+      return <Navigate to="/" />
     }
+    
   }
 
-  return(
-    <div className="Login">
-      {showSuccessMessage && <div className='successMessage'> 로그인 성공</div>}
-      {showErrorMessage && <div className='errorMessage'>로그인 실패</div>}
-      
-      <div className="LoginForm">
-        <div>
-          <label>User Name</label>
-          <input type="text" name="username" value={username} onChange={handleUsernameChange}/>
-        </div>  
-        <div>
-          <label>Password</label>
-          <input type="password" name="password" value={password} onChange={handlePasswordChange}/>
-        </div>  
-        <div>
-          <button type="button" name="login" onClick={handelSumit}> login </button>
-        </div>  
-      </div>
-    </div>
-  )
-}
+  return (
+    <div className="TodoApp">
+      <AuthProvider>
+        <BrowserRouter>
+          <HeaderComponent/>
+          <Routes>
+            <Route path='/' element={<LoginComponent />} />
+            <Route path='login' element={<LoginComponent />} />
 
+            <Route path='welcome/:username' element={
+              <AuthenticatedRoute>
+                <WelcomeComponent />
+              </AuthenticatedRoute>
+            } />
 
+            <Route path='/todos' element={
+              <AuthenticatedRoute>
+                <ListTodosComponent />
+             </AuthenticatedRoute>
+            } />
 
-function WelcomeComponent(){
+            <Route path='logout' element={
+              <AuthenticatedRoute>
+                <LogoutComponent />
+              </AuthenticatedRoute>
+            } />
 
-  const {username} = useParams()
+            <Route path='*' element={<ErrorComponent />} />
 
-  
-  return(
-    <div className="Welcome">
-      <h1> {username}님 환영합니다 </h1>
-      <div >
-        Welcome Component
-      </div>
-    </div>
-    
-  )
-}
-
-function ErrorComponent(){
-  return(
-    <div className="Welcome">
-     <h1>We Are working really hard!</h1>
-     <div>
-        404오류
-     </div>
-    </div>
-  )
-}
-
-function ListTodosComponent(){
-  return(
-    <div className="ListTodosComponent">
-     <h1>해야 할 일을 생각하세요</h1>
-     <div>
-        Todo details
-     </div>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </div>
   )
 }
