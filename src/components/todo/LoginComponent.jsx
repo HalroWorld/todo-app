@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './security/AuthContext'
 export default function LoginComponent() {
-
-  const [username, setUsername] = useState("in28minutes")
+  
+  const [username, setUsername] = useState(useAuth.username)
 
   const [password, setPassword] = useState()
 
