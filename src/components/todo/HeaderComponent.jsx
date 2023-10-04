@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom'
-import { AuthContext, useAuth } from './security/AuthContext'
+import { useAuth } from './security/AuthContext'
 
 
 export default function HeaderComponent() {
@@ -7,6 +7,7 @@ export default function HeaderComponent() {
   // const authContext = useContext(AuthContext)
 
   const authContext = useAuth()
+  
   const isAuthenticated = authContext.isAuthenticated
 
   function logout(){
@@ -37,7 +38,7 @@ export default function HeaderComponent() {
                             <li className="nav-item fs-5">
                               {isAuthenticated && <Link className="nav-link" to="/logout" onClick={logout}>Logout</Link>}
                             </li>
-                            
+
                         </ul>
                     </nav>
                 </div>

@@ -22,8 +22,8 @@ export default function LoginComponent() {
     setPassword(event.target.value)
   }
 
-  function handelSumit() {
-    if (authContext.login(username, password)) {
+  async function handelSumit() {
+    if (await authContext.login(username, password)) {
       navigate(`/welcome/${username}`)
     } else {
       setShowSuccessMessage(false)
@@ -33,7 +33,7 @@ export default function LoginComponent() {
 
   return (
     <div className="Login">
-      
+
       {showErrorMessage && <div className='errorMessage'>로그인 실패</div>}
 
       <div className="LoginForm">

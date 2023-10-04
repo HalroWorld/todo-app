@@ -12,7 +12,7 @@ export default function ListTodosComponent() {
 
   const navigate = useNavigate();
 
-  const targetDate = new Date(today.getFullYear() + 12, today.getMonth(), today.getDay())
+  // const targetDate = new Date(today.getFullYear() + 12, today.getMonth(), today.getDay())
 
   const [todos, setTodos] = useState([])
 
@@ -47,6 +47,10 @@ export default function ListTodosComponent() {
 
   function updateTodo(id){
     navigate(`/Todo/${id}`)
+  }
+
+  function addNewTodo(){
+    navigate(`/Todo/-1`)
   }
 
   return (
@@ -88,6 +92,7 @@ export default function ListTodosComponent() {
           </tbody>
         </table>
       </div>
+      <div className="btn btn-success m-5" onClick={addNewTodo}>Add New Todo</div>
     </div>
   )
 }
